@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2008A3A6299BE95D008BA3A2 /* CustomTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2008A3A5299BE95D008BA3A2 /* CustomTextField.swift */; };
+		2008A3A9299BE9D5008BA3A2 /* ProfileHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2008A3A8299BE9D5008BA3A2 /* ProfileHeaderView.swift */; };
 		202C6FE3299012D4003A9753 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 202C6FE2299012D4003A9753 /* AppDelegate.swift */; };
 		202C6FEC299012D7003A9753 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 202C6FEB299012D7003A9753 /* Assets.xcassets */; };
 		202C6FEF299012D7003A9753 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 202C6FED299012D7003A9753 /* LaunchScreen.storyboard */; };
@@ -19,6 +21,8 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		2008A3A5299BE95D008BA3A2 /* CustomTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextField.swift; sourceTree = "<group>"; };
+		2008A3A8299BE9D5008BA3A2 /* ProfileHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileHeaderView.swift; sourceTree = "<group>"; };
 		202C6FDF299012D4003A9753 /* Navigation.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Navigation.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		202C6FE2299012D4003A9753 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		202C6FEB299012D7003A9753 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -43,9 +47,27 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2008A3A4299BE924008BA3A2 /* Custom */ = {
+			isa = PBXGroup;
+			children = (
+				2008A3A5299BE95D008BA3A2 /* CustomTextField.swift */,
+			);
+			path = Custom;
+			sourceTree = "<group>";
+		};
+		2008A3A7299BE993008BA3A2 /*  Profile */ = {
+			isa = PBXGroup;
+			children = (
+				202C6FFE29901723003A9753 /* ProfileViewController.swift */,
+				2008A3A8299BE9D5008BA3A2 /* ProfileHeaderView.swift */,
+			);
+			path = " Profile";
+			sourceTree = "<group>";
+		};
 		202C6FD6299012D4003A9753 = {
 			isa = PBXGroup;
 			children = (
+				2008A3A7299BE993008BA3A2 /*  Profile */,
 				202C6FE1299012D4003A9753 /* Navigation */,
 				202C6FE0299012D4003A9753 /* Products */,
 			);
@@ -77,9 +99,9 @@
 			children = (
 				202C6FF629901637003A9753 /* TabBarController.swift */,
 				202C6FFC29901701003A9753 /* FeedViewController.swift */,
-				202C6FFE29901723003A9753 /* ProfileViewController.swift */,
 				202C700029901745003A9753 /* PostViewController.swift */,
 				202C700229901764003A9753 /* InfoViewController.swift */,
+				2008A3A4299BE924008BA3A2 /* Custom */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -166,6 +188,8 @@
 				202C700129901745003A9753 /* PostViewController.swift in Sources */,
 				202C6FF729901637003A9753 /* TabBarController.swift in Sources */,
 				202C6FFD29901701003A9753 /* FeedViewController.swift in Sources */,
+				2008A3A9299BE9D5008BA3A2 /* ProfileHeaderView.swift in Sources */,
+				2008A3A6299BE95D008BA3A2 /* CustomTextField.swift in Sources */,
 				202C6FE3299012D4003A9753 /* AppDelegate.swift in Sources */,
 				202C700329901764003A9753 /* InfoViewController.swift in Sources */,
 				202C6FFB299016BC003A9753 /* Post.swift in Sources */,
