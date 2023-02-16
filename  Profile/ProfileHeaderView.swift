@@ -74,6 +74,7 @@ final class ProfileHeaderView: UIView {
 
     private var statusText: String?
     private var key = "key"
+    
 
     override init(frame: CGRect) {
         super.init(frame: .zero)
