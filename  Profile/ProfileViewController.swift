@@ -46,6 +46,7 @@ final class ProfileViewController: UIViewController {
     }
 
     private func setupViews() {
+        view.backgroundColor = .white
         view.addSubview(profileHeaderView)
         view.addSubview(showStatusButton)
     }
@@ -64,8 +65,6 @@ final class ProfileViewController: UIViewController {
             showStatusButton.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -5),
             showStatusButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
             showStatusButton.heightAnchor.constraint(equalToConstant: 50)
-
-
         ])
     }
 }

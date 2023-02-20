@@ -17,17 +17,18 @@ final class TabBarController: UITabBarController {
     private func setupControllers() {
 
         let feedVC = FeedViewController()
-        let profileVC = ProfileViewController()
+        let logInVC = LogInViewController()
 
         let navigationFeedVC = UINavigationController(rootViewController: feedVC)
-        let navigationProfileVC = UINavigationController(rootViewController: profileVC)
+        let navigationLogInVC = UINavigationController(rootViewController: logInVC)
 
         feedVC.tabBarItem.title = "Feed"
         feedVC.tabBarItem.image = UIImage(systemName: "increase.quotelevel")
-        profileVC.tabBarItem.title = "Profile"
-        profileVC.tabBarItem.image = UIImage(systemName: "figure.wave")
 
-        viewControllers = [navigationFeedVC, navigationProfileVC]
+        logInVC.tabBarItem.title = "Profile"
+        logInVC.tabBarItem.image = UIImage(systemName: "figure.wave")
+
+        viewControllers = [navigationFeedVC, navigationLogInVC]
     }
 }
 
