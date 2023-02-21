@@ -1,19 +1,21 @@
 //
-//  LogInView.swift
+//  LogInViewController.swift
 //  Navigation
 //
-//  Created by new owner on 19.02.2023.
+//  Created by new owner on 17.02.2023.
 //
 
 import UIKit
 
-final class LogInView: UIView {
+final class LogInViewController: UIViewController {
 
-        let scrollView: UIScrollView = {
-        let scrollView = UIScrollView()
-        scrollView.translatesAutoresizingMaskIntoConstraints = false
-        return scrollView
-    }()
+    private let notification = NotificationCenter.default
+
+    let scrollView: UIScrollView = {
+    let scrollView = UIScrollView()
+    scrollView.translatesAutoresizingMaskIntoConstraints = false
+    return scrollView
+}()
 
     private let contentView: UIView = {
         let contentView = UIView()
@@ -28,6 +30,10 @@ final class LogInView: UIView {
         stackView.axis = .vertical
         stackView.distribution = .fillEqually
         stackView.spacing = 0
+        stackView.layer.cornerRadius = 10
+        stackView.layer.borderWidth = 0.5
+        stackView.layer.borderColor = UIColor.lightGray.cgColor
+        stackView.layer.masksToBounds = true
         stackView.translatesAutoresizingMaskIntoConstraints = false
         return stackView
     }()
@@ -42,29 +48,25 @@ final class LogInView: UIView {
     }()
 
     private lazy var emailTextField: TextFieldWithPadding = {
-
         let textField = TextFieldWithPadding()
         textField.textColor = .black
         textField.font = UIFont.systemFont(ofSize: 16, weight: .regular)
         textField.placeholder = "Email of phone"
-        textField.layer.cornerRadius = 10
         textField.layer.borderWidth = 0.5
         textField.autocapitalizationType = .none
         textField.layer.borderColor = UIColor.lightGray.cgColor
         textField.backgroundColor = .systemGray6
+        textField.tintColor = myColor
         textField.delegate = self
         textField.translatesAutoresizingMaskIntoConstraints = false
         return textField
     }()
 
     private lazy var passwordTextField: TextFieldWithPadding = {
-
         let textField = TextFieldWithPadding()
         textField.textColor = .black
         textField.font = UIFont.systemFont(ofSize: 16, weight: .regular)
         textField.placeholder = "Password"
-        textField.layer.cornerRadius = 10
-        textField.layer.borderWidth = 0.5
         textField.autocapitalizationType = .none
         textField.isSecureTextEntry = true
         textField.layer.borderColor = UIColor.lightGray.cgColor
@@ -92,21 +94,30 @@ final class LogInView: UIView {
         return button
     }()
 
-    override init(frame: CGRect) {
-        super.init(frame: frame)
+    override func viewDidLoad() {
+        super.viewDidLoad()
         setupViews()
         setupStackView()
+        setupLogInButton()
         checkLoginButtonStates()
         setConstraints()
     }
 
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        notification.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
+        notification.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        notification.removeObserver(UIResponder.keyboardWillShowNotification)
+        notification.removeObserver(UIResponder.keyboardWillHideNotification)
     }
 
     private func setupViews() {
-        backgroundColor = .white
-        addSubview(scrollView)
+        view.backgroundColor = .white
+        view.addSubview(scrollView)
         scrollView.addSubview(contentView)
         contentView.addSubview(vKimageView)
         contentView.addSubview(logInButton)
@@ -118,7 +129,7 @@ final class LogInView: UIView {
         stackView.addArrangedSubview(passwordTextField)
     }
 
-    func checkLoginButtonStates() {
+    private func checkLoginButtonStates() {
             switch logInButton.state {
             case .normal: logInButton.alpha = 1
             case .selected: logInButton.alpha = 0.8
@@ -129,13 +140,17 @@ final class LogInView: UIView {
             }
         }
 
+    private func setupLogInButton() {
+            logInButton.addTarget(self, action: #selector(tapProfileAction), for: .touchUpInside)
+    }
+    
     private func setConstraints() {
         NSLayoutConstraint.activate([
 
-            scrollView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
-            scrollView.bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor),
-            scrollView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            scrollView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
 
 
             contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
@@ -164,11 +179,39 @@ final class LogInView: UIView {
             logInButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor,constant: -20)
         ])
     }
+
+    @objc private func tapProfileAction() {
+        let profileVC = ProfileViewController()
+        navigationController?.pushViewController(profileVC, animated: true)
+    }
+    
+    @objc private func keyboardWillShow(notification: NSNotification) {
+        if let keybordSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+            scrollView.contentInset.bottom = keybordSize.height
+            scrollView.verticalScrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: keybordSize.height, right: 0)
+        }
+    }
+    
+    @objc private func keyboardWillHide() {
+        scrollView.contentInset = .zero
+        scrollView.verticalScrollIndicatorInsets = .zero
+        
+    }
 }
 
-extension LogInView: UITextFieldDelegate {
+extension LogInViewController {
+    func hideNavigationBar() {
+        self.navigationController?.setNavigationBarHidden(true, animated: true)
+    }
+    
+    func showNavigationBar() {
+        self.navigationController?.setNavigationBarHidden(false, animated: true)
+    }
+}
+
+extension LogInViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        endEditing(true)
+        view.endEditing(true)
         return true
     }
 }
