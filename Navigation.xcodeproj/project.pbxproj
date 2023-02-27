@@ -8,9 +8,11 @@
 
 /* Begin PBXBuildFile section */
 		2008A3A6299BE95D008BA3A2 /* CustomTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2008A3A5299BE95D008BA3A2 /* CustomTextField.swift */; };
-		2008A3A9299BE9D5008BA3A2 /* ProfileHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2008A3A8299BE9D5008BA3A2 /* ProfileHeaderView.swift */; };
+		2008A3A9299BE9D5008BA3A2 /* ProfileTableHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2008A3A8299BE9D5008BA3A2 /* ProfileTableHeaderView.swift */; };
 		2008A3AB299FD622008BA3A2 /* LogInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2008A3AA299FD622008BA3A2 /* LogInViewController.swift */; };
 		2008A3B229A020EC008BA3A2 /* CustomUIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2008A3B129A020EC008BA3A2 /* CustomUIColor.swift */; };
+		2008A3B829A8D1A0008BA3A2 /* PostTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2008A3B729A8D1A0008BA3A2 /* PostTableViewCell.swift */; };
+		2008A3BB29AA2049008BA3A2 /* UIView+ Extention.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2008A3BA29AA2049008BA3A2 /* UIView+ Extention.swift */; };
 		202C6FE3299012D4003A9753 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 202C6FE2299012D4003A9753 /* AppDelegate.swift */; };
 		202C6FEC299012D7003A9753 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 202C6FEB299012D7003A9753 /* Assets.xcassets */; };
 		202C6FEF299012D7003A9753 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 202C6FED299012D7003A9753 /* LaunchScreen.storyboard */; };
@@ -24,9 +26,11 @@
 
 /* Begin PBXFileReference section */
 		2008A3A5299BE95D008BA3A2 /* CustomTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomTextField.swift; sourceTree = "<group>"; };
-		2008A3A8299BE9D5008BA3A2 /* ProfileHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileHeaderView.swift; sourceTree = "<group>"; };
+		2008A3A8299BE9D5008BA3A2 /* ProfileTableHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileTableHeaderView.swift; sourceTree = "<group>"; };
 		2008A3AA299FD622008BA3A2 /* LogInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogInViewController.swift; sourceTree = "<group>"; };
 		2008A3B129A020EC008BA3A2 /* CustomUIColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomUIColor.swift; sourceTree = "<group>"; };
+		2008A3B729A8D1A0008BA3A2 /* PostTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostTableViewCell.swift; sourceTree = "<group>"; };
+		2008A3BA29AA2049008BA3A2 /* UIView+ Extention.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+ Extention.swift"; sourceTree = "<group>"; };
 		202C6FDF299012D4003A9753 /* Navigation.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Navigation.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		202C6FE2299012D4003A9753 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		202C6FEB299012D7003A9753 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -63,8 +67,9 @@
 		2008A3A7299BE993008BA3A2 /*  Profile */ = {
 			isa = PBXGroup;
 			children = (
+				2008A3B629A8D0B8008BA3A2 /* TableView */,
 				202C6FFE29901723003A9753 /* ProfileViewController.swift */,
-				2008A3A8299BE9D5008BA3A2 /* ProfileHeaderView.swift */,
+				2008A3A8299BE9D5008BA3A2 /* ProfileTableHeaderView.swift */,
 			);
 			path = " Profile";
 			sourceTree = "<group>";
@@ -75,6 +80,22 @@
 				2008A3AA299FD622008BA3A2 /* LogInViewController.swift */,
 			);
 			path = LogIn;
+			sourceTree = "<group>";
+		};
+		2008A3B629A8D0B8008BA3A2 /* TableView */ = {
+			isa = PBXGroup;
+			children = (
+				2008A3B729A8D1A0008BA3A2 /* PostTableViewCell.swift */,
+			);
+			path = TableView;
+			sourceTree = "<group>";
+		};
+		2008A3B929AA1FF5008BA3A2 /* Extentions */ = {
+			isa = PBXGroup;
+			children = (
+				2008A3BA29AA2049008BA3A2 /* UIView+ Extention.swift */,
+			);
+			path = Extentions;
 			sourceTree = "<group>";
 		};
 		202C6FD6299012D4003A9753 = {
@@ -96,6 +117,7 @@
 		202C6FE1299012D4003A9753 /* Navigation */ = {
 			isa = PBXGroup;
 			children = (
+				2008A3B929AA1FF5008BA3A2 /* Extentions */,
 				202C6FE2299012D4003A9753 /* AppDelegate.swift */,
 				2008A3A7299BE993008BA3A2 /*  Profile */,
 				2008A3B529A26A8E008BA3A2 /* LogIn */,
@@ -203,12 +225,14 @@
 				202C6FF729901637003A9753 /* TabBarController.swift in Sources */,
 				202C6FFD29901701003A9753 /* FeedViewController.swift in Sources */,
 				2008A3B229A020EC008BA3A2 /* CustomUIColor.swift in Sources */,
-				2008A3A9299BE9D5008BA3A2 /* ProfileHeaderView.swift in Sources */,
+				2008A3A9299BE9D5008BA3A2 /* ProfileTableHeaderView.swift in Sources */,
 				2008A3A6299BE95D008BA3A2 /* CustomTextField.swift in Sources */,
 				202C6FE3299012D4003A9753 /* AppDelegate.swift in Sources */,
 				202C700329901764003A9753 /* InfoViewController.swift in Sources */,
 				2008A3AB299FD622008BA3A2 /* LogInViewController.swift in Sources */,
+				2008A3BB29AA2049008BA3A2 /* UIView+ Extention.swift in Sources */,
 				202C6FFB299016BC003A9753 /* Post.swift in Sources */,
+				2008A3B829A8D1A0008BA3A2 /* PostTableViewCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

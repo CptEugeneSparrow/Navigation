@@ -7,7 +7,9 @@
 
 import UIKit
 
-final class ProfileHeaderView: UIView {
+final class ProfileTableHeaderView: UIView {
+
+    private let notification = NotificationCenter.default
 
     private let userImageView: UIImageView = {
         let imageView = UIImageView()
@@ -77,7 +79,7 @@ final class ProfileHeaderView: UIView {
     
 
     override init(frame: CGRect) {
-        super.init(frame: .zero)
+        super.init(frame: frame)
         setupViews()
         setConstraints()
 
@@ -113,7 +115,7 @@ final class ProfileHeaderView: UIView {
     }
 }
 
-extension ProfileHeaderView {
+extension ProfileTableHeaderView {
 
     private func saveToStorage(text: String, with key: String) {
         UserDefaults.standard.set(text, forKey: key)
@@ -128,36 +130,48 @@ extension ProfileHeaderView {
 
     private func setConstraints() {
         NSLayoutConstraint.activate([
-            userImageView.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor, constant: 16),
-            userImageView.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: 16),
+            userImageView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 16),
+            userImageView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: 16),
             userImageView.widthAnchor.constraint(equalToConstant: 100),
             userImageView.heightAnchor.constraint(equalToConstant: 100),
 
 
-            profileUserNameLabel.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor, constant: 0),
-            profileUserNameLabel.leftAnchor.constraint(equalTo: userImageView.rightAnchor, constant: 20),
-            profileUserNameLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -20),
+            profileUserNameLabel.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 27),
+            profileUserNameLabel.leadingAnchor.constraint(equalTo: userImageView.trailingAnchor, constant: 20),
+            profileUserNameLabel.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -20),
 
 
-            statusDescriptionLabel.leftAnchor.constraint(equalTo: userImageView.rightAnchor, constant: 20),
-            statusDescriptionLabel.topAnchor.constraint(equalTo: profileUserNameLabel.bottomAnchor, constant: 5),
-            statusDescriptionLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -20),
+            statusDescriptionLabel.topAnchor.constraint(equalTo: profileUserNameLabel.bottomAnchor, constant: 16),
+            statusDescriptionLabel.leadingAnchor.constraint(equalTo: userImageView.trailingAnchor, constant: 20),
+            statusDescriptionLabel.trailingAnchor.constraint(equalTo:safeAreaLayoutGuide.trailingAnchor, constant: -20),
 
 
-            profileTextField.topAnchor.constraint(equalTo: statusDescriptionLabel.bottomAnchor, constant: 5),
-            profileTextField.leftAnchor.constraint(equalTo: userImageView.rightAnchor, constant: 16),
-            profileTextField.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: -16),
+            profileTextField.topAnchor.constraint(equalTo: statusDescriptionLabel.bottomAnchor, constant: 8),
+            profileTextField.leadingAnchor.constraint(equalTo: userImageView.trailingAnchor, constant: 16),
+            profileTextField.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -16),
             profileTextField.heightAnchor.constraint(equalToConstant: 40),
 
 
-            showStatusButton.centerXAnchor.constraint(equalTo: self.centerXAnchor),
-            showStatusButton.heightAnchor.constraint(equalToConstant: 50),
             showStatusButton.topAnchor.constraint(equalTo: profileTextField.bottomAnchor, constant: 16),
-            showStatusButton.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: 16),
-            showStatusButton.trailingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.trailingAnchor, constant: -16),
-            showStatusButton.topAnchor.constraint(equalTo: userImageView.bottomAnchor, constant: 50),
+            showStatusButton.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: 16),
+            showStatusButton.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -16),
+            showStatusButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -15),
+            showStatusButton.heightAnchor.constraint(equalToConstant: 50),
         ])
     }
 }
 
+//extension ProfileTableHeaderView: UITextFieldDelegate {
+//
+//    func textFieldDidChangeSelection(_ textField: UITextField) {
+//        guard let text = textField.text else { return }
+//        showStatusButton.isEnabled = !text.isEmpty
+//    }
+//
+//
+//    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+//        endEditing(true)
+//        return true
+//    }
+//}
 
