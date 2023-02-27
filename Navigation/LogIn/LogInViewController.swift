@@ -11,11 +11,11 @@ final class LogInViewController: UIViewController {
 
     private let notification = NotificationCenter.default
 
-    let scrollView: UIScrollView = {
-    let scrollView = UIScrollView()
-    scrollView.translatesAutoresizingMaskIntoConstraints = false
-    return scrollView
-}()
+    private let scrollView: UIScrollView = {
+        let scrollView = UIScrollView()
+        scrollView.translatesAutoresizingMaskIntoConstraints = false
+        return scrollView
+    }()
 
     private let contentView: UIView = {
         let contentView = UIView()
@@ -194,8 +194,7 @@ final class LogInViewController: UIViewController {
     
     @objc private func keyboardWillHide() {
         scrollView.contentInset = .zero
-        scrollView.verticalScrollIndicatorInsets = .zero
-        
+        scrollView.verticalScrollIndicatorInsets = .zero        
     }
 }
 

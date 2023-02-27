@@ -22,6 +22,8 @@ final class TabBarController: UITabBarController {
         let navigationFeedVC = UINavigationController(rootViewController: feedVC)
         let navigationLogInVC = UINavigationController(rootViewController: logInVC)
 
+        navigationLogInVC.navigationBar.isHidden  = true
+
         feedVC.tabBarItem.title = "Feed"
         feedVC.tabBarItem.image = UIImage(systemName: "increase.quotelevel")
 
