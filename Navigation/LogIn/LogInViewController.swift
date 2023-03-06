@@ -107,6 +107,7 @@ final class LogInViewController: UIViewController {
         super.viewWillAppear(animated)
         notification.addObserver(self, selector: #selector(keyboardWillShow), name: UIResponder.keyboardWillShowNotification, object: nil)
         notification.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+        navigationController?.isNavigationBarHidden = true
     }
 
     override func viewWillDisappear(_ animated: Bool) {
@@ -141,7 +142,7 @@ final class LogInViewController: UIViewController {
         }
 
     private func setupLogInButton() {
-            logInButton.addTarget(self, action: #selector(tapProfileAction), for: .touchUpInside)
+        logInButton.addTarget(self, action: #selector(tapProfileAction), for: .touchUpInside)
     }
     
     private func setConstraints() {
@@ -200,11 +201,11 @@ final class LogInViewController: UIViewController {
 
 extension LogInViewController {
     func hideNavigationBar() {
-        self.navigationController?.setNavigationBarHidden(true, animated: true)
+//        self.navigationController?.setNavigationBarHidden(true, animated: true)
     }
     
     func showNavigationBar() {
-        self.navigationController?.setNavigationBarHidden(false, animated: true)
+//        self.navigationController?.setNavigationBarHidden(false, animated: true)
     }
 }
 
