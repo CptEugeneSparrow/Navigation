@@ -46,7 +46,7 @@ final class ProfileTableHeaderView: UIView {
         return label
     }()
 
-    private let profileTextField: TextFieldWithPadding = {
+    private lazy var profileTextField: TextFieldWithPadding = {
 
         let textField = TextFieldWithPadding()
         textField.textColor = .black
@@ -56,6 +56,7 @@ final class ProfileTableHeaderView: UIView {
         textField.layer.borderWidth = 1.0
         textField.layer.borderColor = UIColor.black.cgColor
         textField.backgroundColor = .white
+        textField.delegate = self
         textField.translatesAutoresizingMaskIntoConstraints = false
         return textField
     }()
@@ -161,17 +162,11 @@ extension ProfileTableHeaderView {
     }
 }
 
-//extension ProfileTableHeaderView: UITextFieldDelegate {
-//
-//    func textFieldDidChangeSelection(_ textField: UITextField) {
-//        guard let text = textField.text else { return }
-//        showStatusButton.isEnabled = !text.isEmpty
-//    }
-//
-//
-//    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-//        endEditing(true)
-//        return true
-//    }
-//}
+extension ProfileTableHeaderView: UITextFieldDelegate {
+
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        endEditing(true)
+        return true
+    }
+}
 
