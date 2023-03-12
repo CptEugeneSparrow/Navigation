@@ -201,11 +201,11 @@ final class LogInViewController: UIViewController {
 
 extension LogInViewController {
     func hideNavigationBar() {
-//        self.navigationController?.setNavigationBarHidden(true, animated: true)
+        self.navigationController?.setNavigationBarHidden(true, animated: true)
     }
     
     func showNavigationBar() {
-//        self.navigationController?.setNavigationBarHidden(false, animated: true)
+        self.navigationController?.setNavigationBarHidden(false, animated: true)
     }
 }
 

@@ -30,9 +30,13 @@ final class ProfileViewController: UIViewController {
         layout()
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        navigationController?.isNavigationBarHidden = true
+    }
+
     private func layout() {
         view.addSubview(postTableView)
-//        postTableView.tableHeaderView = ProfileTableHeaderView(frame: CGRect(x: 0, y: 0, width: postTableView.frame.width, height: 220))
         postTableView.backgroundColor = .systemGray4
         
         NSLayoutConstraint.activate([

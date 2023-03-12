@@ -9,8 +9,6 @@ import UIKit
 
 final class FeedViewController: UIViewController {
 
-//    private let myPost = Post(title: "My post")
-
     private let stackView: UIStackView = {
         let stackView = UIStackView()
         stackView.backgroundColor = .systemGray4
