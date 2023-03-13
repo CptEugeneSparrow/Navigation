@@ -77,7 +77,6 @@ final class PostTableViewCell: UITableViewCell {
         contentView.backgroundColor = .systemGray5
         contentView.layer.borderWidth = 0
         let inset: CGFloat = 16
-//        let screenWidth = UIScreen.main.bounds.width
 
         NSLayoutConstraint.activate([
             authorLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: inset),
@@ -88,7 +87,6 @@ final class PostTableViewCell: UITableViewCell {
             imagePost.topAnchor.constraint(equalTo: authorLabel.bottomAnchor, constant: inset),
             imagePost.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: -0.5),
             imagePost.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: 0.5),
-//                        imagePost.heightAnchor.constraint(equalToConstant: screenWidth),
             imagePost.heightAnchor.constraint(equalToConstant: 300),
 
 

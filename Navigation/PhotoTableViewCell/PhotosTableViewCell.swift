@@ -7,7 +7,7 @@
 
 import UIKit
 
-class PhotosTableViewCell: UITableViewCell {
+final class PhotosTableViewCell: UITableViewCell {
 
     let photosLabel: UILabel = {
         let label = UILabel()
@@ -128,7 +128,6 @@ class PhotosTableViewCell: UITableViewCell {
             imageViewFour.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -Metric.inset)
         ])
     }
-
 }
 
 extension PhotosTableViewCell {

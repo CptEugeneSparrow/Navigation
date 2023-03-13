@@ -47,7 +47,6 @@ final class ProfileTableHeaderView: UIView {
     }()
 
     private lazy var profileTextField: TextFieldWithPadding = {
-
         let textField = TextFieldWithPadding()
         textField.textColor = .black
         textField.font = UIFont.systemFont(ofSize: 15, weight: .regular)
@@ -58,6 +57,7 @@ final class ProfileTableHeaderView: UIView {
         textField.backgroundColor = .white
         textField.delegate = self
         textField.translatesAutoresizingMaskIntoConstraints = false
+        textField.addTarget(self, action: #selector(statusTextChanged), for: .editingChanged)
         return textField
     }()
 
@@ -75,6 +75,30 @@ final class ProfileTableHeaderView: UIView {
         return button
     }()
 
+    private let transLucentView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .black
+        view.frame = UIScreen.main.bounds
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+
+    private lazy var closeProfileImageButton: UIButton = {
+        let button = UIButton()
+        button.setImage(UIImage(systemName: "xmark"), for: .normal)
+        button.alpha = 0
+        button.tintColor = .white
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.addTarget(self, action: #selector(cancelAction), for: .touchUpInside)
+        return button
+    }()
+
+    private var topConstraintImage = NSLayoutConstraint()
+    private var leadingConstraintImage = NSLayoutConstraint()
+    private var widthConstraintImage = NSLayoutConstraint()
+    private var heightConstraintImage = NSLayoutConstraint()
+
+
     private var statusText: String?
     private var key = "key"
     
@@ -83,6 +107,7 @@ final class ProfileTableHeaderView: UIView {
         super.init(frame: frame)
         setupViews()
         setConstraints()
+        setupTapGesture()
 
         self.statusDescriptionLabel.text = loadFromStorage(by: "somekey")
     }
@@ -98,23 +123,73 @@ final class ProfileTableHeaderView: UIView {
         addSubview(statusDescriptionLabel)
         addSubview(showStatusButton)
         addSubview(profileTextField)
-        profileTextField.addTarget(self, action: #selector(statusTextChanged), for: .editingChanged)
+    }
+
+    private func setupTapGesture() {
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(tapAction))
+        userImageView.isUserInteractionEnabled = true
+        userImageView.addGestureRecognizer(tapGesture)
     }
 
     @objc
-    private func statusTextChanged(_ profileTextField: UITextField) {
-        if let text = profileTextField.text {
-            statusText = text
+    private func tapAction() {
+        addSubview(transLucentView)
+        addSubview(closeProfileImageButton)
+        bringSubviewToFront(userImageView)
+
+        NSLayoutConstraint.activate([
+            closeProfileImageButton.topAnchor.constraint(equalTo: topAnchor, constant: 5),
+            closeProfileImageButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -5),
+            closeProfileImageButton.widthAnchor.constraint(equalToConstant: 30),
+            closeProfileImageButton.heightAnchor.constraint(equalToConstant: 30)
+        ])
+
+        UIView.animateKeyframes(withDuration: 0.5, delay: 0.0) {
+            self.transLucentView.alpha = 0.5
+            self.userImageView.layer.cornerRadius = 0
+            self.topConstraintImage.constant = 100
+            self.leadingConstraintImage.constant = 0
+            self.widthConstraintImage.constant = UIScreen.main.bounds.width
+            self.heightConstraintImage.constant = UIScreen.main.bounds.width
+            self.layoutIfNeeded()
+        }
+        UIView.animateKeyframes(withDuration: 0.3, delay: 0.5) {
+            self.closeProfileImageButton.alpha = 1
         }
     }
 
     @objc
-    private func setStatusAction() {
-        self.statusDescriptionLabel.text = self.statusText
-        self.profileTextField.text = nil
-        self.saveToStorage(text: self.statusText ?? "", with: "somekey")
+    private func cancelAction() {
+        UIView.animateKeyframes(withDuration: 0.4, delay: 0, options: [.calculationModeCubicPaced], animations: {
+            UIView.addKeyframe(withRelativeStartTime: 0.0, relativeDuration: 0.2) {
+                self.closeProfileImageButton.alpha = 0
+            }
+            UIView.addKeyframe(withRelativeStartTime: 0.2, relativeDuration: 0.8) {
+                self.userImageView.layer.cornerRadius = 50
+                self.topConstraintImage.constant = 16
+                self.leadingConstraintImage.constant = 16
+                self.widthConstraintImage.constant = 100
+                self.heightConstraintImage.constant = 100
+                self.transLucentView.alpha = 0
+                self.layoutIfNeeded()
+            }
+        }, completion: nil)
     }
-}
+
+        @objc
+        private func statusTextChanged(_ profileTextField: UITextField) {
+            if let text = profileTextField.text {
+                statusText = text
+            }
+        }
+
+        @objc
+        private func setStatusAction() {
+            self.statusDescriptionLabel.text = self.statusText
+            self.profileTextField.text = nil
+            self.saveToStorage(text: self.statusText ?? "", with: "somekey")
+        }
+    }
 
 extension ProfileTableHeaderView {
 
@@ -126,36 +201,41 @@ extension ProfileTableHeaderView {
         if let returnText = UserDefaults.standard.string(forKey: key) {
             return returnText
         }
-        return ""
+        return " "
     }
 
     private func setConstraints() {
+
+        topConstraintImage = userImageView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 16)
+        leadingConstraintImage = userImageView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: 16)
+        widthConstraintImage = userImageView.widthAnchor.constraint(equalToConstant: 100)
+        heightConstraintImage = userImageView.heightAnchor.constraint(equalToConstant: 100)
+
         NSLayoutConstraint.activate([
-            userImageView.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 16),
-            userImageView.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: 16),
-            userImageView.widthAnchor.constraint(equalToConstant: 100),
-            userImageView.heightAnchor.constraint(equalToConstant: 100),
+            topConstraintImage,
+            leadingConstraintImage,
+            widthConstraintImage,
+            heightConstraintImage,
 
-
-            profileUserNameLabel.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 27),
-            profileUserNameLabel.leadingAnchor.constraint(equalTo: userImageView.trailingAnchor, constant: 20),
-            profileUserNameLabel.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -20),
+            profileUserNameLabel.topAnchor.constraint(equalTo: self.safeAreaLayoutGuide.topAnchor, constant: 27),
+            profileUserNameLabel.leadingAnchor.constraint(equalTo: self.safeAreaLayoutGuide.leadingAnchor, constant: 130),
+            profileUserNameLabel.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -16),
 
 
             statusDescriptionLabel.topAnchor.constraint(equalTo: profileUserNameLabel.bottomAnchor, constant: 16),
-            statusDescriptionLabel.leadingAnchor.constraint(equalTo: userImageView.trailingAnchor, constant: 20),
-            statusDescriptionLabel.trailingAnchor.constraint(equalTo:safeAreaLayoutGuide.trailingAnchor, constant: -20),
+            statusDescriptionLabel.leadingAnchor.constraint(equalTo: profileUserNameLabel.leadingAnchor),
+            statusDescriptionLabel.trailingAnchor.constraint(equalTo:profileUserNameLabel.trailingAnchor),
 
 
             profileTextField.topAnchor.constraint(equalTo: statusDescriptionLabel.bottomAnchor, constant: 8),
-            profileTextField.leadingAnchor.constraint(equalTo: userImageView.trailingAnchor, constant: 16),
-            profileTextField.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -16),
+            profileTextField.leadingAnchor.constraint(equalTo: profileUserNameLabel.leadingAnchor),
+            profileTextField.trailingAnchor.constraint(equalTo: profileUserNameLabel.trailingAnchor),
             profileTextField.heightAnchor.constraint(equalToConstant: 40),
 
 
             showStatusButton.topAnchor.constraint(equalTo: profileTextField.bottomAnchor, constant: 16),
-            showStatusButton.leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: 16),
-            showStatusButton.trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: -16),
+            showStatusButton.leadingAnchor.constraint(equalTo: self.leadingAnchor, constant: 16),
+            showStatusButton.trailingAnchor.constraint(equalTo: self.trailingAnchor, constant: -16),
             showStatusButton.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -15),
             showStatusButton.heightAnchor.constraint(equalToConstant: 50),
         ])
