@@ -9,6 +9,29 @@ import UIKit
 
 final class PostTableViewCell: UITableViewCell {
 
+    var handler: ((IndexPath) -> Void)?
+
+    var indexPath: IndexPath?
+
+    var viewsCount: Int? {
+        didSet {
+            viewsLabel.text = "Views: \(viewsCount ?? 0 )"
+        }
+    }
+
+    var isLiked: Bool = false {
+        didSet {
+            isLiked ? notLiked() : liked()
+            isLiked ? (likesCount = 1) : (likesCount = 0)
+        }
+    }
+
+    var likesCount: Int = 0 {
+        didSet {
+            likesLabel.text = "Likes: \(likesCount)"
+        }
+    }
+
     private let imagePost: UIImageView = {
         let image = UIImageView()
         image.contentMode = .scaleAspectFill
@@ -32,18 +55,27 @@ final class PostTableViewCell: UITableViewCell {
         let description = UILabel()
         description.font = UIFont.systemFont(ofSize: 15, weight: .regular)
         description.textColor = .darkGray
-        description.numberOfLines = 0
+        description.numberOfLines = 15
         description.translatesAutoresizingMaskIntoConstraints = false
         return description
     }()
 
-    private let likesLabel: UILabel = {
+    private lazy var likesLabel: UILabel = {
         let likes = UILabel()
         likes.numberOfLines = 1
         likes.font = UIFont.systemFont(ofSize: 15, weight: .regular)
-        likes.textColor = .darkGray
+        likes.textColor = .systemBlue
+        likes.text = "Likes: \(likesCount)"
         likes.translatesAutoresizingMaskIntoConstraints = false
         return likes
+    }()
+
+    private let heartImage: UIImageView = {
+        let heartImage = UIImageView(image: UIImage(systemName: "suit.heart.fill"))
+        heartImage.tintColor = .systemGray
+        heartImage.contentMode = .scaleAspectFit
+        heartImage.translatesAutoresizingMaskIntoConstraints = false
+        return heartImage
     }()
 
     private let viewsLabel: UILabel = {
@@ -54,26 +86,68 @@ final class PostTableViewCell: UITableViewCell {
         views.translatesAutoresizingMaskIntoConstraints = false
         return views
     }()
-
+    
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         layout()
+        setupGesture()
     }
 
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
 
-    func setupCell(model: Post) {
+    func setupCell(model: Post, indexPath: IndexPath) {
+        self.indexPath = indexPath
+        
         authorLabel.text = model.author
         imagePost.image = UIImage(named: model.image)
         descriptionLabel.text = model.description
-        likesLabel.text = "Likes: \(model.likes)"
-        viewsLabel.text = "Views: \(model.views)"
+    }
+
+    private func setupGesture() {
+        likesLabel.isUserInteractionEnabled = true
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(likesLabelTapAction))
+        likesLabel.addGestureRecognizer(tapGesture)
+
+        let heartTapGesture = UITapGestureRecognizer(target: self, action: #selector(likesLabelTapAction))
+        heartImage.addGestureRecognizer(heartTapGesture)
+        heartImage.isUserInteractionEnabled = true
+    }
+
+    @objc private func likesLabelTapAction() {
+        if let indexPath = indexPath {
+            handler?(indexPath)
+        }
+    }
+
+    private func liked() {
+        UIView.animate(withDuration: 0.2) {
+            self.heartImage.transform = CGAffineTransform(scaleX: 0.8, y: 0.8)
+        } completion: { _ in
+            self.heartImage.transform = .identity
+        }
+        heartImage.tintColor = .systemGray
+    }
+
+    private func notLiked() {
+        UIView.animate(withDuration: 0.2) {
+            self.heartImage.transform = CGAffineTransform(scaleX: 1.2, y: 1.2)
+        } completion: { _ in
+            UIView.animate(withDuration: 0.2) {
+                self.heartImage.transform = .identity
+            }
+        }
+        heartImage.tintColor = .systemPink
     }
 
     private func layout() {
-        [imagePost, authorLabel, descriptionLabel, likesLabel,viewsLabel].forEach { contentView.addSubview( $0 ) }
+        [imagePost,
+         authorLabel,
+         descriptionLabel,
+         likesLabel,
+         heartImage,
+         viewsLabel].forEach { contentView.addSubview( $0 ) }
         contentView.backgroundColor = .systemGray5
         contentView.layer.borderWidth = 0
         let inset: CGFloat = 16
@@ -83,22 +157,23 @@ final class PostTableViewCell: UITableViewCell {
             authorLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: inset),
             authorLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -inset),
 
-
             imagePost.topAnchor.constraint(equalTo: authorLabel.bottomAnchor, constant: inset),
             imagePost.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: -0.5),
             imagePost.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: 0.5),
             imagePost.heightAnchor.constraint(equalToConstant: 300),
 
-
             descriptionLabel.topAnchor.constraint(equalTo: imagePost.bottomAnchor, constant: inset),
             descriptionLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: inset),
             descriptionLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -inset),
 
+            likesLabel.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 30),
+            likesLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 30),
+            likesLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -30),
 
-            likesLabel.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: inset),
-            likesLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: inset),
-            likesLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -inset),
-
+            heartImage.centerYAnchor.constraint(equalTo: likesLabel.centerYAnchor),
+            heartImage.leadingAnchor.constraint(equalTo: likesLabel.leadingAnchor, constant: -22),
+            heartImage.widthAnchor.constraint(equalToConstant: 20),
+            heartImage.heightAnchor.constraint(equalToConstant: 20),
 
             viewsLabel.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: inset),
             viewsLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -inset),
@@ -106,3 +181,5 @@ final class PostTableViewCell: UITableViewCell {
         ])
     }
 }
+
+

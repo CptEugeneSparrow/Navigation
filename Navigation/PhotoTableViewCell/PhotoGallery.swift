@@ -12,7 +12,6 @@ struct PhotoGallery {
     static func setupGallery() -> [ImageGallery] {
         [
             .init(id: 1, imageName: "van gog house and plowman"),
-            .init(id: 2, imageName: "shishkin mishki"),
             .init(id: 3, imageName: "sezanne"),
             .init(id: 4, imageName: "serov"),
             .init(id: 5, imageName: "renoir"),
@@ -36,18 +35,22 @@ struct PhotoGallery {
             .init(id: 23, imageName: "boticelli"),
             .init(id: 24, imageName: "aivazovskiy"),
             .init(id: 25, imageName: "absent"),
-            .init(id: 26, imageName: "matisse"),
         ]
     }
 
-    static func randomPhotos(with count: Int) -> [ImageGallery] {
-        return (0..<count).map { _ in setupGallery().randomElement()! }
+    static func photos(with count: Int) -> [ImageGallery] {
+        let gallery = setupGallery().shuffled()
+        guard count <= gallery.count else {
+            return gallery }
+        return Array(gallery.prefix(count))
     }
 }
+
 
 struct ImageGallery {
     let id: Int
     let imageName: String
+    var image: UIImage?
 }
 
 struct SectionPhoto {
