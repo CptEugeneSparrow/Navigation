@@ -20,6 +20,7 @@ final class PhotosCollectionViewCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupLayoutConstraints()
+
     }
 
     required init?(coder: NSCoder) {

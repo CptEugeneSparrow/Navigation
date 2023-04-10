@@ -11,6 +11,9 @@ final class LogInViewController: UIViewController {
 
     private let notification = NotificationCenter.default
 
+    private lazy var userLogin = "genyaF@protonmail.ru"
+    private lazy var userPassword = "xhiu-4Hodr/-datA"
+
     private let scrollView: UIScrollView = {
         let scrollView = UIScrollView()
         scrollView.translatesAutoresizingMaskIntoConstraints = false
@@ -74,6 +77,19 @@ final class LogInViewController: UIViewController {
         textField.tintColor = myColor
         textField.delegate = self
         textField.translatesAutoresizingMaskIntoConstraints = false
+
+        let eyeButton = UIButton(type: .custom)
+            eyeButton.setImage(UIImage(systemName: "eyebrow"), for: .normal)
+            eyeButton.tintColor = .lightGray
+            eyeButton.addTarget(self, action: #selector(togglePasswordVisibility), for: .touchUpInside)
+
+        let eyeContainer = UIView(frame: CGRect(x: 0, y: 0, width: 25, height: 20))
+        eyeContainer.addSubview(eyeButton)
+        eyeButton.frame = CGRect(x: -10, y: 0, width: 20, height: 20)
+
+        textField.rightView = eyeContainer
+        textField.rightViewMode = .always
+
         return textField
     }()
 
@@ -92,6 +108,18 @@ final class LogInViewController: UIViewController {
         button.layer.masksToBounds = true
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
+    }()
+
+    private let passwordWarningLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = .red
+        label.textAlignment = .center
+        label.font = .systemFont(ofSize: 15)
+        label.text = "Пароль должен содержать не менее 16 символов"
+        label.alpha = 0.7
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.isHidden = true
+        return label
     }()
 
     override func viewDidLoad() {
@@ -123,6 +151,7 @@ final class LogInViewController: UIViewController {
         contentView.addSubview(vKimageView)
         contentView.addSubview(logInButton)
         contentView.addSubview(stackView)
+        contentView.addSubview(passwordWarningLabel)
     }
 
     private func setupStackView() {
@@ -144,7 +173,39 @@ final class LogInViewController: UIViewController {
     private func setupLogInButton() {
         logInButton.addTarget(self, action: #selector(tapProfileAction), for: .touchUpInside)
     }
-    
+
+    private func shakeAnimationEmailTextField() {
+            let shake = CABasicAnimation(keyPath: "position")
+            shake.duration = 0.1
+            shake.repeatCount = 2
+            shake.autoreverses = true
+            shake.fromValue = NSValue(cgPoint: CGPoint(x: emailTextField.center.x - 5, y: emailTextField.center.y))
+            shake.toValue = NSValue(cgPoint: CGPoint(x: emailTextField.center.x + 5, y: emailTextField.center.y))
+            emailTextField.layer.add(shake, forKey: "position")
+        }
+
+    private func shakeAnimationPasswordTextField() {
+             let shake = CABasicAnimation(keyPath: "position")
+             shake.duration = 0.1
+             shake.repeatCount = 2
+             shake.autoreverses = true
+             shake.fromValue = NSValue(cgPoint: CGPoint(x: passwordTextField.center.x - 5, y: passwordTextField.center.y))
+             shake.toValue = NSValue(cgPoint: CGPoint(x:  passwordTextField.center.x + 5, y:  passwordTextField.center.y))
+             passwordTextField.layer.add(shake, forKey: "position")
+         }
+
+    private func shakeAnimationPasswordLabel() {
+             let shake = CABasicAnimation(keyPath: "position")
+             shake.duration = 0.1
+             shake.repeatCount = 2
+             shake.autoreverses = true
+             shake.fromValue = NSValue(cgPoint: CGPoint(x: passwordWarningLabel.center.x - 4,
+                                                        y: passwordWarningLabel.center.y))
+             shake.toValue = NSValue(cgPoint: CGPoint(x:  passwordWarningLabel.center.x + 4,
+                                                      y:  passwordWarningLabel.center.y))
+             passwordWarningLabel.layer.add(shake, forKey: "position")
+         }
+
     private func setConstraints() {
         NSLayoutConstraint.activate([
 
@@ -172,25 +233,58 @@ final class LogInViewController: UIViewController {
             stackView.trailingAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.trailingAnchor, constant: -16),
             stackView.heightAnchor.constraint(equalToConstant: 100),
 
+            
+            passwordWarningLabel.trailingAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.trailingAnchor, constant: 20),
+            passwordWarningLabel.leadingAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.leadingAnchor, constant: -20),
+            passwordWarningLabel.bottomAnchor.constraint(equalTo: logInButton.topAnchor),
 
-            logInButton.topAnchor.constraint(equalTo: stackView.bottomAnchor, constant: 16),
+            logInButton.topAnchor.constraint(equalTo: stackView.bottomAnchor, constant: 20),
             logInButton.leadingAnchor.constraint(equalTo: stackView.leadingAnchor),
             logInButton.trailingAnchor.constraint(equalTo: stackView.trailingAnchor),
             logInButton.heightAnchor.constraint(equalToConstant: 50),
-            logInButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor,constant: -20)
+            logInButton.bottomAnchor.constraint(equalTo: contentView.bottomAnchor,constant: -20),
         ])
     }
 
     @objc private func tapProfileAction() {
-        let profileVC = ProfileViewController()
-        navigationController?.pushViewController(profileVC, animated: true)
+        guard !emailTextField.text!.isEmpty, !passwordTextField.text!.isEmpty else {
+            if emailTextField.text!.isEmpty {
+                shakeAnimationEmailTextField()
+            }
+            if passwordTextField.text!.isEmpty {
+                shakeAnimationPasswordTextField()
+            }
+            return
+        }
+        if passwordTextField.text!.count < 16 {
+            passwordWarningLabel.isHidden = false
+            shakeAnimationPasswordTextField()
+            return
+        } else {
+            passwordWarningLabel.isHidden = true
+        }
+        if emailTextField.text == userLogin && passwordTextField.text == userPassword {
+            let profileVC = ProfileViewController()
+            navigationController?.pushViewController(profileVC, animated: true)
+            view.endEditing(true)
+        } else {
+            let alert = UIAlertController(title: "Ошибка", message: "Неверный логин или пароль", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Ok", style: .default))
+            present(alert, animated: true)
+        }
     }
-    
+
     @objc private func keyboardWillShow(notification: NSNotification) {
         if let keybordSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
             scrollView.contentInset.bottom = keybordSize.height
             scrollView.verticalScrollIndicatorInsets = UIEdgeInsets(top: 0, left: 0, bottom: keybordSize.height, right: 0)
         }
+    }
+
+    @objc func togglePasswordVisibility(_ sender: UIButton) {
+        passwordTextField.isSecureTextEntry.toggle()
+        let imageName = passwordTextField.isSecureTextEntry ? "eyebrow" : "eye"
+        sender.setImage(UIImage(systemName: imageName), for: .normal)
     }
     
     @objc private func keyboardWillHide() {
@@ -200,6 +294,7 @@ final class LogInViewController: UIViewController {
 }
 
 extension LogInViewController {
+
     func hideNavigationBar() {
         self.navigationController?.setNavigationBarHidden(true, animated: true)
     }
@@ -210,6 +305,7 @@ extension LogInViewController {
 }
 
 extension LogInViewController: UITextFieldDelegate {
+
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         view.endEditing(true)
         return true

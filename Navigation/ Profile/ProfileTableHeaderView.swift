@@ -63,7 +63,7 @@ final class ProfileTableHeaderView: UIView {
 
     private (set) lazy var showStatusButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Show status", for: .normal)
+        button.setTitle("Set Status", for: .normal)
         button.setTitleColor(.white, for: .normal)
         button.backgroundColor = .systemBlue
         button.layer.shadowOffset = CGSize(width: 4, height: 4)
@@ -78,6 +78,7 @@ final class ProfileTableHeaderView: UIView {
     private let transLucentView: UIView = {
         let view = UIView()
         view.backgroundColor = .black
+        view.alpha = 0
         view.frame = UIScreen.main.bounds
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
@@ -101,14 +102,13 @@ final class ProfileTableHeaderView: UIView {
 
     private var statusText: String?
     private var key = "key"
-    
+
 
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupViews()
         setConstraints()
         setupTapGesture()
-
         self.statusDescriptionLabel.text = loadFromStorage(by: "somekey")
     }
 
@@ -117,12 +117,22 @@ final class ProfileTableHeaderView: UIView {
     }
 
     private func setupViews() {
-        backgroundColor = .lightGray
+        backgroundColor = .systemGray3
         addSubview(userImageView)
         addSubview(profileUserNameLabel)
         addSubview(statusDescriptionLabel)
         addSubview(showStatusButton)
         addSubview(profileTextField)
+    }
+
+    private func shakeAnimationProfileTextField() {
+        let shake = CABasicAnimation(keyPath: "position")
+        shake.duration = 0.1
+        shake.repeatCount = 2
+        shake.autoreverses = true
+        shake.fromValue = NSValue(cgPoint: CGPoint(x: profileTextField.center.x - 3, y: profileTextField.center.y))
+        shake.toValue = NSValue(cgPoint: CGPoint(x: profileTextField.center.x + 3, y: profileTextField.center.y))
+        profileTextField.layer.add(shake, forKey: "position")
     }
 
     private func setupTapGesture() {
@@ -145,7 +155,7 @@ final class ProfileTableHeaderView: UIView {
         ])
 
         UIView.animateKeyframes(withDuration: 0.5, delay: 0.0) {
-            self.transLucentView.alpha = 0.5
+            self.transLucentView.alpha = 0.7
             self.userImageView.layer.cornerRadius = 0
             self.topConstraintImage.constant = 100
             self.leadingConstraintImage.constant = 0
@@ -176,20 +186,24 @@ final class ProfileTableHeaderView: UIView {
         }, completion: nil)
     }
 
-        @objc
-        private func statusTextChanged(_ profileTextField: UITextField) {
-            if let text = profileTextField.text {
-                statusText = text
-            }
+    @objc
+    private func statusTextChanged(_ profileTextField: UITextField) {
+        if let text = profileTextField.text {
+            statusText = text
         }
+    }
 
-        @objc
-        private func setStatusAction() {
+    @objc
+    private func setStatusAction() {
+        if profileTextField.text!.isEmpty {
+            shakeAnimationProfileTextField()
+        } else {
             self.statusDescriptionLabel.text = self.statusText
             self.profileTextField.text = nil
             self.saveToStorage(text: self.statusText ?? "", with: "somekey")
         }
     }
+}
 
 extension ProfileTableHeaderView {
 
