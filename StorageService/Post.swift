@@ -7,13 +7,13 @@
 
 import UIKit
 
-struct Post {
-    let author: String
-    let description: String
-    let image: String
+public struct Post {
+    public let author: String
+    public let description: String
+    public let image: String
     var isLiked: Bool
 
-    static func makePost() -> [Post] {
+    public static func makePost() -> [Post] {
         return [
             Post(author: "Эрмитаж", description: "Наша задача — не просто познакомить вас с Эрмитажем, но помочь понять его и захотеть возвращаться сюда вновь и вновь! Доступно и интересно для всех возрастов я расскажу об истории музея, его экспонатах и жизни монархов. Вы полюбуетесь парадными залами и лоджиями Рафаэля, увидите, как сменялись эпохи искусства, и узнаете, чем Эрмитаж отличается от Зимнего дворца.",
                  image: "ermitage",

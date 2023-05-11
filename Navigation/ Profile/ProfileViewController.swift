@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import StorageService
 
 final class ProfileViewController: UIViewController {
 
@@ -29,7 +30,7 @@ final class ProfileViewController: UIViewController {
         UserDefaults.standard.set(data, forKey: self.likesKey)
     }
     
-    private var postModel: [[Any]] = [["Photos"], Post.makePost()]
+    public var postModel: [[Any]] = [["Photos"], Post.makePost()]
     
     private lazy var postTableView: UITableView = {
         let tableView = UITableView(frame: .zero, style: .grouped)
@@ -42,10 +43,21 @@ final class ProfileViewController: UIViewController {
         tableView.dataSource = self
         tableView.rowHeight = UITableView.automaticDimension
         tableView.separatorStyle = .none
+        tableView.backgroundColor = .systemGray4
         tableView.translatesAutoresizingMaskIntoConstraints = false
         return tableView
     }()
-    
+
+    override func loadView() {
+        super.loadView()
+//#if DEBUG
+//return view.backgroundColor = .systemBlue
+//#else
+//return view.backgroundColor = .systemGreen
+//#endif
+        view = Configuration.viewForDebugOrRelease
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         layout()
@@ -58,7 +70,6 @@ final class ProfileViewController: UIViewController {
     
     private func layout() {
         view.addSubview(postTableView)
-        postTableView.backgroundColor = .systemGray4
         
         NSLayoutConstraint.activate([
             postTableView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
